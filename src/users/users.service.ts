@@ -25,4 +25,3 @@ export class UsersService {
     return this.userModel.create({ email, passwordHash });
   }
 }
-

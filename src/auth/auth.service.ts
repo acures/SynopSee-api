@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
@@ -20,7 +24,10 @@ export class AuthService {
     }
 
     const passwordHash = await bcrypt.hash(registerDto.password, 10);
-    const user = await this.usersService.createUser(registerDto.email, passwordHash);
+    const user = await this.usersService.createUser(
+      registerDto.email,
+      passwordHash,
+    );
 
     return this.buildToken(user);
   }
@@ -31,7 +38,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const passwordValid = await bcrypt.compare(loginDto.password, user.passwordHash);
+    const passwordValid = await bcrypt.compare(
+      loginDto.password,
+      user.passwordHash,
+    );
     if (!passwordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -49,4 +59,3 @@ export class AuthService {
     return { access_token: accessToken };
   }
 }
-
